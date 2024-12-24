@@ -9,127 +9,104 @@ NEXT STEPS:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vogel Spiral Visualizer</title>
-<style>
-  :root {
-    --radius: 4px;
-    --dark:   #343434;
-    --lite:   #efefef;
-  }   
-    body {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      font-family: system-ui;
-      background: var(--lite)
+  <style>
+    @layer reset, theme, layout;
+    
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      * { margin: 0; }
     }
-    .controls {
-      margin: 20px;
-      font-family: system-ui;
+    @layer theme {
+      :root {
+        --unit: 4px;
+        --dark:   #444444;
+        --lite:   #efefef;
+      }   
     }
-    .control-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .control-row label {
-      width: 120px;
-      margin-right: 10px;
-    }
-    .control-row input[type="range"] {
-      width: 200px;
-      margin-right: 10px;
-      -webkit-appearance: none;  /* Override default CSS styles */
-      appearance: none;
-      /* background: blue; */
-      border-radius: calc(var(--radius) * 10);
-    }
-    .control-row input[type="number"] {
-      width: 80px;
-      padding: 6px;
-      border-radius: var(--radius);
-      border: 1px solid var(--dark)
-    }
-    .control-row input[type="text"] {
-      width: 80px;
-      padding: 6px;
-      border-radius: var(--radius);
-      border: 1px solid var(--dark)
-    }
-    canvas {
-      margin: 20px;
-      border-radius: calc(var(--radius) * 3);
-    }
-    button {
-      margin: 20px 0;
-      padding: 8px 16px;
-      background-color: var(--dark);
-      color: white;
-      border: none;
-      border-radius: calc(var(--radius) * 10);
-      cursor: pointer;
-      transition: all 200ms ease-in-out;
-    }
-    button:hover, button:focus {
-      transform: scale(1.1);
-      background: #484D7C;
-    }
-  </style>
-</head>
-<body>
-  <div class="controls">
-    <div class="control-row">
-      <label>Number of dots:</label>
-      <input type="range" id="numDots" min="10" max="1000" value="300">
-      <input type="number" id="numDotsNumber" min="10" max="1000" value="300">
+    @layer layout {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-family: system-ui;
+        background: var(--lite);
+        font-family: system-ui;
+        font-size: 1rem;
+        color: var(--dark);
+      }
+      h1 {
+        font-size: 2.2rem;
+        color: red;
+        line-height: 0.9;
+        letter-spacing: -.01em;
+        margin: 0 0 24px 0;
+        -webkit-font-smoothing: antialiased;
+        text-wrap: balance;
+      }
+      .controls {
+        margin: 20px;
+        max-width: 400px;
+      }
+      .control-row {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .control-row label {
+        width: 88px;
+        /* margin-right: 8px; */
+      }
+      .control-row input[type="range"] {
+        width: 120px;
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        border-radius: calc(var(--unit) * 12);
+      }
+      .control-row input[type="number"] {
+        width: 60px;
+        padding: 6px;
+        border-radius: var(--unit);
+        border: 1px solid var(--dark)
+      }
+      .control-row input[type="text"] {
+        width: 80px;
+        padding: 6px;
+        border-radius: var(--unit);
+        border: 1px solid var(--dark)
+      }
+      canvas {
+        margin: 20px;
+        width: 90%;
+        aspect-ratio: 1/1;
+      }
+      button {
+        margin: 20px 0;
+        padding: 8px 16px;
+        background-color: var(--dark);
+        color: white;
+        border: none;
+        border-radius: calc(var(--unit) * 10);
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+      }
+      button:hover, button:focus {
+        transform: scale(1.1);
+        background: #ff3300;
+      }
+      @media (min-width: 768px) /* TABLET */{
+      }
+      @media (min-width: 1024px) /* DESKTOP */{
+        body { 
+          flex-direction: row;
+        }
+        h1 { font-size: 3rem; color: blue; }
+        canvas { width: unset; }
+      }
+      
+    </style>
     </div>
-    <div class="control-row">
-      <label>Distance scale:</label>
-      <input type="range" id="distance" min="1" max="10" step="0.1" value="8">
-      <input type="number" id="distanceNumber" min="1" max="10" step="0.1" value="8">
-    </div>
-    <div class="control-row">
-      <label>Dot size:</label>
-      <input type="range" id="dotSize" min="1" max="10" step="0.1" value="6.8">
-      <input type="number" id="dotSizeNumber" min="1" max="10" step="0.1" value="6.8">
-    </div>
-    <div class="control-row">
-      <label>Initial spacing:</label>
-      <input type="range" id="initialSpacing" min="0.1" max="8" step="0.1" value="0.3">
-      <input type="number" id="initialSpacingNumber" min="0.1" max="8" step="0.1" value="0.3">
-    </div>
-    <div class="control-row">
-      <label>Growth factor:</label>
-      <input type="range" id="growthFactor" min="0.1" max="2" step="0.1" value="1.7">
-      <input type="number" id="growthFactorNumber" min="0.1" max="2" step="0.1" value="1.7">
-    </div>
-    <div class="control-row">
-      <label>Dot color:</label>
-      <input type="text" id="dotColor" value="#343434" pattern="^#([A-Fa-f0-9]{6})$">
-    </div>
-    <div>
-      <button onclick="exportSVG()">Export SVG</button>
-    </div>
-  </div>
-  <canvas id="spiral" width="600" height="600"></canvas>
-
-  <script>
-    const canvas = document.getElementById('spiral');
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // Golden angle in radians
-    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-
-    function drawSpiral() {
-      const numDots = parseInt(document.getElementById('numDots').value);
-      const distanceScale = parseFloat(document.getElementById('distance').value);
-      const dotSize = parseFloat(document.getElementById('dotSize').value);
-      const initialSpacing = parseFloat(document.getElementById('initialSpacing').value);
-      const growthFactor = parseFloat(document.getElementById('growthFactor').value);
-      const dotColor = document.getElementById('dotColor').value;
 
       // Clear canvas
       ctx.clearRect(0, 0, width, height);
@@ -140,78 +117,87 @@ NEXT STEPS:
         const radius = (Math.sqrt(i) * distanceScale + radiusOffset) * growthFactor;
         const theta = i * goldenAngle;
         
-        const x = centerX + radius * Math.cos(theta);
-        const y = centerY + radius * Math.sin(theta);
-
-        ctx.beginPath();
-        ctx.arc(x, y, dotSize, 0, 2 * Math.PI);
-        ctx.fillStyle = dotColor;
-        ctx.fill();
-      }
-    }
-
-    function exportSVG() {
-      const numDots = parseInt(document.getElementById('numDots').value);
-      const distanceScale = parseFloat(document.getElementById('distance').value);
-      const dotSize = parseFloat(document.getElementById('dotSize').value);
-      const initialSpacing = parseFloat(document.getElementById('initialSpacing').value);
-      const growthFactor = parseFloat(document.getElementById('growthFactor').value);
-      const dotColor = document.getElementById('dotColor').value;
-
-      let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">`;
-      
-      // Generate dots
-      for (let i = 0; i < numDots; i++) {
-        const radiusOffset = dotSize * 2 * initialSpacing;
-        const radius = (Math.sqrt(i) * distanceScale + radiusOffset) * growthFactor;
-        const theta = i * goldenAngle;
+        // Clear canvas
+        ctx.clearRect(0, 0, width, height);
         
-        const x = centerX + radius * Math.cos(theta);
-        const y = centerY + radius * Math.sin(theta);
-
-        svg += `<circle cx="${x}" cy="${y}" r="${dotSize}" fill="${dotColor}"/>`;
+        // Draw dots
+        for (let i = 0; i < numDots; i++) {
+          const radiusOffset = dotSize * 2 * initialSpacing;
+          const radius = (Math.sqrt(i) * distanceScale + radiusOffset) * growthFactor;
+          const theta = i * goldenAngle;
+          
+          const x = centerX + radius * Math.cos(theta);
+          const y = centerY + radius * Math.sin(theta);
+          
+          ctx.beginPath();
+          ctx.arc(x, y, dotSize, 0, 2 * Math.PI);
+          ctx.fillStyle = dotColor;
+          ctx.fill();
+        }
       }
-
-      svg += '</svg>';
-
-      // Create blob and download
-      const blob = new Blob([svg], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'vogel-spiral.svg';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // Sync slider with number input and update spiral
-    function setupControl(baseId) {
-      const slider = document.getElementById(baseId);
-      const number = document.getElementById(baseId + 'Number');
-
-      if (slider && number) {
-        slider.addEventListener('input', () => {
-          number.value = slider.value;
-          drawSpiral();
-        });
-
-        number.addEventListener('input', () => {
-          slider.value = number.value;
-          drawSpiral();
-        });
-      }
-    }
-
-    // Setup color input
-    document.getElementById('dotColor').addEventListener('input', drawSpiral);
-
-    // Setup all controls
-    ['numDots', 'distance', 'dotSize', 'initialSpacing', 'growthFactor'].forEach(setupControl);
-
-    // Initial draw
-    drawSpiral();
-  </script>
-</body>
-</html>
+      
+      function exportSVG() {
+        const numDots = parseInt(document.getElementById('numDots').value);
+        const distanceScale = parseFloat(document.getElementById('distance').value);
+        const dotSize = parseFloat(document.getElementById('dotSize').value);
+        const growthFactor = parseFloat(document.getElementById('growthFactor').value);
+        const initialSpacing = parseFloat(document.getElementById('initialSpacing').value); // min. distance between dots
+        
+        const dotColor = document.getElementById('dotColor').value;
+        
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">`;
+          
+          // Generate dots
+          for (let i = 0; i < numDots; i++) {
+            const radiusOffset = dotSize * 2 * initialSpacing;
+            const radius = (Math.sqrt(i) * distanceScale + radiusOffset);
+            const theta = i * goldenAngle;
+            
+            const x = centerX + radius * Math.cos(theta);
+            const y = centerY + radius * Math.sin(theta);
+            
+            svg += `<circle cx="${x}" cy="${y}" r="${dotSize}" fill="${dotColor}"/>`;
+          }
+          
+          svg += '</svg>';
+          
+          // Create blob and download
+          const blob = new Blob([svg], { type: 'image/svg+xml' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'vogel-spiral.svg';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        
+        // Sync slider with number input and update spiral
+        function setupControl(baseId) {
+          const slider = document.getElementById(baseId);
+          const number = document.getElementById(baseId + 'Number');
+          
+          if (slider && number) {
+            slider.addEventListener('input', () => {
+              number.value = slider.value;
+              drawSpiral();
+            });
+            
+            number.addEventListener('input', () => {
+              slider.value = number.value;
+              drawSpiral();
+            });
+          }
+        }
+        
+        // Setup color input
+        document.getElementById('dotColor').addEventListener('input', drawSpiral);
+        
+        // Setup all controls
+        ['numDots', 'distance', 'dotSize', 'initialSpacing', 'growthFactor'].forEach(setupControl);        
+        // Initial draw
+        drawSpiral();
+      </script>
+    </body>
+    </html>
