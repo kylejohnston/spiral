@@ -107,6 +107,38 @@ NEXT STEPS:
       
     </style>
       <h1>Vogel Spiral Visualizer</h1>
+      <div class="control-row">
+        <label>Dots:</label>
+        <input type="range" id="numDots" min="10" max="1000" value="300">
+        <input type="number" id="numDotsNumber" min="10" max="1000" value="300">
+      </div>
+      <div class="control-row">
+        <label>Size:</label>
+        <input type="range" id="dotSize" min="1" max="8" step="0.1" value="6.8">
+        <input type="number" id="dotSizeNumber" min="1" max="8" step="0.1" value="6.8">
+      </div>
+      <div class="control-row">
+        <label>Distance:</label>
+        <input type="range" id="distance" min="1" max="24" step="0.1" value="8">
+        <input type="number" id="distanceNumber" min="1" max="24" step="0.1" value="8">
+      </div>
+      <div class="control-row">
+        <label>Spacing:</label>
+        <input type="range" id="initialSpacing" min="0.1" max="24" step="0.1" value="0.3">
+        <input type="number" id="initialSpacingNumber" min="0.1" max="24" step="0.1" value="0.3">
+      </div>
+      <div class="control-row">
+        <label>Growth:</label>
+        <input type="range" id="growthFactor" min="0.1" max="2" step="0.1" value="1.7">
+        <input type="number" id="growthFactorNumber" min="0.1" max="2" step="0.1" value="1.7">
+      </div>
+      <div class="control-row">
+        <label>Color:</label>
+        <input type="text" id="dotColor" value="#343434" pattern="^#([A-Fa-f0-9]{6})$">
+      </div>
+      <div>
+        <button onclick="exportSVG()">Export SVG</button>
+      </div>
     </div>
 
       // Clear canvas
