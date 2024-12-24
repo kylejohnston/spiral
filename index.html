@@ -180,9 +180,8 @@
         const numDots = parseInt(document.getElementById('numDots').value);
         const distanceScale = parseFloat(document.getElementById('distance').value);
         const dotSize = parseFloat(document.getElementById('dotSize').value);
+        const initialSpacing = parseFloat(document.getElementById('initialSpacing').value);
         const growthFactor = parseFloat(document.getElementById('growthFactor').value);
-        const initialSpacing = parseFloat(document.getElementById('initialSpacing').value); // min. distance between dots
-        
         const dotColor = document.getElementById('dotColor').value;
         
         let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">`;
@@ -190,7 +189,7 @@
           // Generate dots
           for (let i = 0; i < numDots; i++) {
             const radiusOffset = dotSize * 2 * initialSpacing;
-            const radius = (Math.sqrt(i) * distanceScale + radiusOffset);
+            const radius = (Math.sqrt(i) * distanceScale + radiusOffset) * growthFactor;
             const theta = i * goldenAngle;
             
             const x = centerX + radius * Math.cos(theta);
