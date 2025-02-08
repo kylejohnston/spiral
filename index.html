@@ -182,8 +182,20 @@
         const initialSpacing = parseFloat(document.getElementById('initialSpacing').value);
         const growthFactor = parseFloat(document.getElementById('growthFactor').value);
         const dotColor = document.getElementById('dotColor').value;
+
+        // Create metadata object in single line JSON format
+        const metadata = {
+            "dots": numDots,
+            "size": dotSize,
+            "distance": distanceScale,
+            "spacing": initialSpacing,
+            "growth": growthFactor,
+            "color": dotColor,
+            "created": new Date().toISOString()
+        };
         
-        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">`;
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">
+<desc>${JSON.stringify(metadata)}</desc>`;
           
           // Generate dots
           for (let i = 0; i < numDots; i++) {
@@ -198,13 +210,16 @@
           }
           
           svg += '</svg>';
-          
+
+          // Create descriptive filename
+          const filename = `vogel-spiral-${numDots}-${initialSpacing.toFixed(1)}.svg`;
+
           // Create blob and download
           const blob = new Blob([svg], { type: 'image/svg+xml' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'vogel-spiral.svg';
+          a.download = filename;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
